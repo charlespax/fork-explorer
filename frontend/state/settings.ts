@@ -11,12 +11,15 @@ export interface ISettingsModel {
 
   changeTheme: Thunk<ISettingsModel, Theme>;
   changeAutoRefreshEnabled: Thunk<ISettingsModel, boolean>;
+  changeHighlightFinalBlockEnabled: Thunk<ISettingsModel, boolean>;
 
   setTheme: Action<ISettingsModel, Theme>;
   setAutoRefreshEnabled: Action<ISettingsModel, boolean>;
+  setHighlightFinalBlockEnabled: Action<ISettingsModel, boolean>;
 
   theme: Theme;
   autoRefreshEnabled: boolean;
+  highlightFinalBlockEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -24,6 +27,9 @@ export const settings: ISettingsModel = {
     actions.setTheme((await (window as any).localStorage.getItem("theme")) ?? "default");
     actions.setAutoRefreshEnabled(
       JSON.parse((await (window as any).localStorage.getItem("autoRefreshEnabled")) ?? true)
+    );
+    actions.setHighlightFinalBlockEnabled(
+      JSON.parse((await (window as any).localStorage.getItem("highlightFinalBlockEnabled")) ?? true)
     );
   }),
 
@@ -37,6 +43,12 @@ export const settings: ISettingsModel = {
     actions.setAutoRefreshEnabled(payload);
   }),
 
+  changeHighlightFinalBlock: thunk(async (actions, payload) => {
+    await (window as any).localStorage.setItem("highlightFinalBlockEnabled", JSON.stringify(payload));
+    actions.setHighlightFinalBlockEnabled(payload);
+    console.log("settings.tx: changeHighlightFinalBlock");
+  }),
+
   setTheme: action((state, payload) => {
     state.theme = payload;
   }),
@@ -45,8 +57,14 @@ export const settings: ISettingsModel = {
     state.autoRefreshEnabled = payload;
   }),
 
+  setHighlightFinalBlockEnabled: action((state, payload) => {
+    state.highlightFinalBlockEnabled = payload;
+    console.log("settings.ts: setHighlightFinalBlockEnabled", state.highlightFinalBlockEnabled);
+  }),
+
   theme: Theme.default,
   autoRefreshEnabled: true,
+  highlightFinalBlockEnabled: true,
 };
 
 export default settings;

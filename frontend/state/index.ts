@@ -11,6 +11,7 @@ export interface IStoreModel {
   getBlocks: Thunk<IStoreModel>;
   setBlocks: Action<IStoreModel, IBlock[]>;
   autoRefresh: Thunk<IStoreModel>;
+  highlightFinalBlock: Thunk<IStoreModel>;
   blocks: IBlock[];
   settings: ISettingsModel;
 }
@@ -68,6 +69,12 @@ export const model: IStoreModel = {
         console.log("Couldn't fetch /blocks", error.message);
       }
     }, config.frontend.autoRefreshInterval * 1000);
+  }),
+
+  highlightFinalBlock: thunk((actions, _, { getState }) => {
+      if (!getState().settings.highlightFinalBlockEnabled) {
+        console.log("highlightFinalBlock is clicked");
+      }
   }),
 
   setBlocks: action((state, payload) => {

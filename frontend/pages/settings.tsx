@@ -54,9 +54,11 @@ const Checkbox = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
 export default function Blocks() {
   const forkName = config.fork.name;
   const autoRefreshEnabled = useStoreState((store) => store.settings.autoRefreshEnabled);
+  const highlightFinalBlockEnabled = useStoreState((store) => store.settings.highlightFinalBlockEnabled);
   const currentTheme = useStoreState((store) => store.settings.theme);
   const changeTheme = useStoreActions((store) => store.settings.changeTheme);
   const changeAutoRefreshEnabled = useStoreActions((store) => store.settings.changeAutoRefreshEnabled);
+  const changeHighlightFinalBlockEnabled = useStoreActions((store) => store.settings.changeHighlightFinalBlockEnabled);
 
   const onChangeTheme = async (theme: Theme) => {
     await changeTheme(theme);
@@ -64,6 +66,10 @@ export default function Blocks() {
 
   const toggleAutoRefreshEnabled = async () => {
     await changeAutoRefreshEnabled(!autoRefreshEnabled);
+  };
+
+  const toggleHighlightFinalBlockEnabled = async () => {
+    await changeHighlightFinalBlockEnabled(!highlightFinalBlockEnabled);
   };
 
   return (
@@ -100,6 +106,10 @@ export default function Blocks() {
                 <Checkbox onChange={toggleAutoRefreshEnabled} checked={autoRefreshEnabled} />
               </SettingsGroup>
             )}
+            <SettingsGroup>
+              <SettingsLabel>Highlight projected final block</SettingsLabel>
+              <Checkbox onChange={toggleHighlightFinalBlockEnabled} checked={highlightFinalBlockEnabled} />
+            </SettingsGroup>
           </SettingsContainer>
         </Body>
         {config.frontend.twitterHandle && <ContactTwitter />}
